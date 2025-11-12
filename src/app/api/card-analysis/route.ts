@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { validateFile } from "../utils/helpers";
 import { analyzeCardService } from "../../services/cardAnalysis.service";
-
 export async function POST(req: Request) {
     try {
         const form = await req.formData();
@@ -14,10 +13,15 @@ export async function POST(req: Request) {
         }
     
         const file = validation.file!;
-        //service de procesamiento del file 
+
+        //llamo al service de procesamiento del file 
         const result = await analyzeCardService(file);
     
-        return NextResponse.json(result, { status: 200 });
+        if (result.success) {
+            return NextResponse.json(result.data, { status: 200 });
+        } else {
+            return NextResponse.json(result.error, { status: 400 });
+        }
         
     } catch (error: any) {
         console.error(error);

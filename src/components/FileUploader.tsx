@@ -39,13 +39,13 @@ export default function FileUploader() {
         setError(null);
         setResult(null);
 
+        const formData = new FormData();
+        formData.append("file", file);
         try {
-            const base64 = await fileToBase64(file);
 
             const res = await fetch("/api/analyze", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ file: base64, filename: file.name }),
+                body: formData,
             });
 
             const data = await res.json();
