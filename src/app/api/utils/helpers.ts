@@ -55,7 +55,7 @@ export function validateFile(fileEntry: FormDataEntryValue | null) {
 
 export function buildPrompt() {
     return `
-        You are an expert assistant specialized in NBA trading cards and PSA (Professional Sports Authenticator) standards.
+       You are an expert assistant specialized in NBA trading cards and PSA (Professional Sports Authenticator) standards.
         Your role is to analyze images of trading cards to identify whether they are authentically PSA-graded and to extract visible information from the PSA label for cataloging purposes.
 
         Step 1: Validation
@@ -69,20 +69,21 @@ export function buildPrompt() {
         If the image does appear to be a PSA-graded card, extract all visible details from the PSA label and respond exclusively with a JSON object using the following structure:
 
         {
-        "player_name": "Full name of the player",
-        "team": "Team name",
-        "year": 2021,
-        "card_brand": "Card brand (e.g., Panini, Topps, Upper Deck)",
-        "card_number": "Card number, if visible",
-        "grade": "PSA grade (e.g., 10 GEM MINT, 9 MINT, etc.)",
-        "psa_label_color": "Main color of the PSA label (e.g., red, silver, gold)",
-        "serial_number": "Serial number shown on the label or card, or null if not visible",
-        "additional_text": "Any other relevant text or details (e.g., special edition, holo, refractor, etc.)"
+          "player_name": "Full name of the player",
+          "team": "Team name",
+          "year": 2021,
+          "card_brand": "Card brand (e.g., Panini, Topps, Upper Deck)",
+          "card_number": "Card number, if visible",
+          "grade": "PSA grade (e.g., 10 GEM MINT, 9 MINT, etc.)",
+          "psa_label_color": "Main color of the PSA label (e.g., red, silver, gold)",
+          "serial_number": "Serial number shown on the label or card, or null if not visible",
+          "parallel": "The card's parallel or variation such as Prizm, Silver, Refractor, Holo, Mosaic, numbered cards (e.g., /99), SP/SSP — or null if none is visible"
         }
 
         Instructions
-        Do not make up, fabricate or infer information.
-        Analyze visible text, colors, and layout patterns carefully.
-        Respond only with valid JSON, with no extra commentary or explanations outside the JSON object.
+        - Do not make up, fabricate, or infer information.
+        - Extract only details that are visibly present.
+        - If no parallel or variation can be confidently identified, return "parallel": null.
+        - Respond only with valid JSON, with no extra commentary or explanations outside the JSON object.
     `;
 }

@@ -1,6 +1,6 @@
 // src/services/cardAnalysis.service.ts
 import { CardAnalysisResult, CardAnalysisError, CardAnalysisResponse,  } from "../../types/cardResult";
-import { aiClient, openai } from "../lib/aiClient";
+import { aiClient } from "../lib/aiClient";
 import { buildPrompt } from "../api/utils/helpers";
 
 export async function analyzeCardService(image: File): Promise<CardAnalysisResponse> {

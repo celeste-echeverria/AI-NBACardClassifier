@@ -1,49 +1,28 @@
-
-import { CardAnalysisError, CardAnalysisResult } from "@/types/cardResult";
-import OpenAI from "openai";
-import { ChatCompletionMessageParam } from "openai/resources";
-import { ResponseInputItem } from "openai/resources/responses/responses.mjs";
-
-//cliente de openAI
-export const openai = new OpenAI({
-  apiKey: process.env.AI_API_KEY!,
-});
+import { generateText } from "ai";
+import { openai } from "@ai-sdk/openai";
 
 export const aiClient = {
-  async generateJSON({
-    prompt,
-    imageBase64,
-    file
-  }: {
-    prompt: string;
-    imageBase64: string;
-    file: File;
-  }): Promise<CardAnalysisResult | CardAnalysisError> {
+  async generateJSON({ prompt, imageBase64, file }: { prompt: string; imageBase64: string; file: File | { type: string } }): Promise<any> {
     try {
+      const model = openai("gpt-4.1-mini");
 
-      const message = [
-        {
-          role: "user",
-          content: [
-            { 
-              type: "input_text", 
-              text: prompt 
-            },
-            {
-              type: "input_image",
-              image_url: `data:${file.type};base64,${imageBase64}`,
-            },
-          ],
-        },
-      ] as ResponseInputItem[]
-
-      const response = await openai.responses.create({
-        model: "gpt-4.1-mini",
-        input: message,
+      const { text } = await generateText({
+        model,
+        messages: [
+          {
+            role: "user",
+            content: [
+              { type: "text", text: prompt },
+              {
+                type: "image",
+                image: `data:${file.type};base64,${imageBase64}`,
+              },
+            ],
+          },
+        ],
       });
 
-      if(!response.output_text) throw new Error("No content returned from model");
-      return JSON.parse(response.output_text) as CardAnalysisResult | CardAnalysisError;
+      return JSON.parse(text);
 
     } catch (err) {
       console.error("AI Client error:", err);

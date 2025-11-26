@@ -1,15 +1,13 @@
 export interface CardAnalysisResult {
-  playerName: string;
-  team?: string;
-  year?: string;
-  cardNumber?: string;
-  setName?: string;
-  grade?: string;
-  certificationNumber?: string;
-  conditionDetails?: string;
-  sport?: "Basketball" | "Other";
-  issuer?: string;
-  notes?: string;
+  player_name: string;
+  team: string;
+  year: number;
+  card_brand: string;
+  card_number: string | null;
+  grade: string;
+  psa_label_color: string;
+  serial_number: string | null;
+  parallel: string | null;
 }
 
 export interface CardAnalysisError {
